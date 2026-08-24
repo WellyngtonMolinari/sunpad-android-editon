@@ -601,7 +601,7 @@ void RuntimeHost::RunGame(const fs::path& game_root,
       config.graphics.backend = backend;
       config.headless = false;
       config.show_fps_in_title = false;
-      config.enable_gmse01_60fps = false;
+      config.enable_gmse01_60fps = true;
       config.module =
           moderngekko::ModuleSource::DynamicPath(module_path.string());
       config.render_surface = current_surface_;
@@ -609,7 +609,7 @@ void RuntimeHost::RunGame(const fs::path& game_root,
                    backend, static_cast<void*>(current_surface_),
                    current_surface_ ? ANativeWindow_getWidth(current_surface_) : 0,
                    current_surface_ ? ANativeWindow_getHeight(current_surface_) : 0);
-      SunPadNativeLog("creating runtime (30 FPS)");
+      SunPadNativeLog("creating runtime (60 FPS)");
       return moderngekko::Runtime::Create(std::move(config));
     };
 
@@ -939,7 +939,7 @@ void RuntimeHost::ApplyPendingSettings() {
 
   char buf[256];
   std::snprintf(buf, sizeof(buf),
-                "graphics: dual-core=1 GLES 30fps ram-iso=%d vi-skip=0 "
+                "graphics: dual-core=1 GLES 60fps ram-iso=%d vi-skip=0 "
                 "specialized=1 soc=%s cores=%d ram=%ldMB weak=%d",
                 ram_load ? 1 : 0, dev.tag, dev.cores, dev.mem_mb,
                 dev.weak ? 1 : 0);

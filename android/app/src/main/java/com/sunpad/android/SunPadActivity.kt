@@ -121,7 +121,7 @@ class SunPadActivity : Activity(), SurfaceHolder.Callback {
 
         setContentView(rootView)
         gamepad.attach(rootView)
-        lockThirtyFpsPresent()
+        lockSixtyFpsPresent()
 
         applyPrefsToControls()
         DiagnosticLog.ensurePublicFolder(this)
@@ -154,7 +154,7 @@ class SunPadActivity : Activity(), SurfaceHolder.Callback {
     override fun onResume() {
         super.onResume()
         setImmersive()
-        lockThirtyFpsPresent()
+        lockSixtyFpsPresent()
         SunPadNative.resume()
     }
 
@@ -176,7 +176,7 @@ class SunPadActivity : Activity(), SurfaceHolder.Callback {
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         surfaceReady = true
-        lockThirtyFpsPresent()
+        lockSixtyFpsPresent()
         SunPadNative.setSurface(holder.surface)
         if (!started || startPending) {
             startGameIfReady()
@@ -806,10 +806,10 @@ class SunPadActivity : Activity(), SurfaceHolder.Callback {
 
     // ------------------------------------------------------------------ helpers
 
-    // Honor X9b is 120 Hz. Compositing a 30 FPS GameCube frame 120 times a
+    // Honor X9b is 120 Hz. Compositing a 60 FPS GameCube frame 120 times a
     // second heats the SoC and looks like hitch. Prefer a 60 Hz mode and
-    // tell SurfaceFlinger this surface is a fixed 30 FPS source.
-    private fun lockThirtyFpsPresent() {
+    // tell SurfaceFlinger this surface is a fixed 60 FPS source.
+    private fun lockSixtyFpsPresent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 val d = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
@@ -830,7 +830,7 @@ class SunPadActivity : Activity(), SurfaceHolder.Callback {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             try {
                 surfaceView.holder.surface?.setFrameRate(
-                    30f, android.view.Surface.FRAME_RATE_COMPATIBILITY_FIXED_SOURCE)
+                    60f, android.view.Surface.FRAME_RATE_COMPATIBILITY_FIXED_SOURCE)
             } catch (_: Throwable) {
             }
         }
